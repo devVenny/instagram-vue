@@ -2,7 +2,9 @@
   <div
     :class="`${this.filterName} filter-item`"
     :style="`background-image: url(${ImageURL})`"
-  ></div>
+  >
+    <slot name="a"></slot>
+  </div>
 </template>
 
 <script>

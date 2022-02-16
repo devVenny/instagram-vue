@@ -14,7 +14,9 @@
           :key="i"
           :ImageURL="ImageURL"
           :filterName="filter"
-        ></FilterBox>
+        >
+          <template v-slot:a>{{ filter }}</template>
+        </FilterBox>
       </div>
     </div>
 
