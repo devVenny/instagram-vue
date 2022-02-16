@@ -4,16 +4,32 @@
       <li>Cancel</li>
     </ul>
     <ul class="header-button-right">
-      <li>Next</li>
+      <li @click="step = 2" v-if="step === 1">Next</li>
+      <li @click="uploadPost" v-if="step === 2">Upload</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
   </div>
 
-  <Container />
+  <button @click="stpeChange(0)">포스트</button>
+  <button @click="stpeChange(1)">포스트 필터 편집</button>
+  <button @click="stpeChange(2)">포스트 텍스트 편집</button>
+
+  <Container
+    @inputText="getInputText"
+    :datas="datas"
+    :step="step"
+    :ImageURL="ImageURL"
+  />
 
   <div class="footer">
     <ul class="footer-button-plus">
-      <input type="file" id="file" class="inputfile" />
+      <input
+        @change="upload"
+        multiple
+        type="file"
+        id="file"
+        class="inputfile"
+      />
       <label for="file" class="input-plus">+</label>
     </ul>
   </div>
@@ -21,16 +37,69 @@
 
 <script>
 import Container from "./components/Container.vue";
+import postData from "./api/postData";
+import axios from "axios";
 
 export default {
   name: "App",
+  data() {
+    return {
+      datas: postData,
+      step: 0,
+      ImageURL: "",
+      text: "",
+    };
+  },
   components: {
     Container,
+  },
+  methods: {
+    more() {
+      axios
+        .get(`https://codingapple1.github.io/vue/more${this.count}.json`)
+        .then((res) => {
+          this.datas.push(res.data);
+          this.count++;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    stpeChange(num) {
+      this.step = num;
+    },
+    upload(e) {
+      const uploadedFile = e.target.files[0];
+      console.log(uploadedFile.type);
+      this.step = 1;
+      this.ImageURL = URL.createObjectURL(uploadedFile);
+    },
+    uploadPost() {
+      const newPost = {
+        name: "Kim Hyun",
+        userImage: "https://placeimg.com/100/100/arch",
+        postImage: `${this.ImageURL}`,
+        likes: 33,
+        date: "May 15",
+        liked: false,
+        content: `${this.text}`,
+        filter: "perpetua",
+      };
+      this.datas.unshift(newPost);
+      this.step = 0;
+    },
+    getInputText(text) {
+      this.text = text;
+    },
   },
 };
 </script>
 
 <style>
+.hide {
+  display: none;
+}
+
 body {
   margin: 0;
 }

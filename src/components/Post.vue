@@ -1,4 +1,27 @@
 <template>
+  <div class="post" v-for="(data, i) in datas" :key="i">
+    <div class="post-header">
+      <div
+        class="profile"
+        v-bind:style="{ backgroundImage: `url(${data.userImage})` }"
+      ></div>
+      <span class="profile-name">{{ data.name }}</span>
+    </div>
+    <div
+      class="post-body"
+      v-bind:style="{ backgroundImage: `url(${data.postImage})` }"
+    ></div>
+    <div class="post-content">
+      <p>Likes {{ data.likes }}</p>
+      <p>
+        <strong>{{ data.name }}</strong>
+        <span>{{ data.content }}</span>
+      </p>
+      <p class="date">{{ data.date }}</p>
+    </div>
+  </div>
+
+  <!-- 
   <div class="post">
     <div class="post-header">
       <div class="profile"></div>
@@ -10,12 +33,15 @@
       <p><strong>글쓴이아이디</strong> 임시내용</p>
       <p class="date">May 15</p>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
 export default {
   name: "Post",
+  props: {
+    datas: Array,
+  },
 };
 </script>
 
@@ -24,7 +50,6 @@ export default {
   width: 100%;
 }
 .profile {
-  background-image: url("https://placeimg.com/100/100/arch");
   width: 30px;
   height: 30px;
   background-size: 100%;
@@ -43,7 +68,6 @@ export default {
   padding: 10px;
 }
 .post-body {
-  background-image: url("https://placeimg.com/640/480/animals");
   height: 450px;
   background-position: center;
   background-size: cover;
